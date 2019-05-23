@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Iron Bank - Transactions</title>
+  </head>
+
+  <body>
+  
+	<p id="txns"></p>
+	
+	<script>
+		var xmlhttp = new XMLHttpRequest();
+		
+		var txnurl = "https://r7p2rhg4ji.execute-api.eu-west-1.amazonaws.com/v1";
+		
+		//process query
+		var params = window.location.search.split("?");	
+		params = params[1].split("&");
+		
+		var pair = [];
+		var Authorization = "";
+		var bankId = ""
+		var companyId = "";
+		var accountId = "";
+		
+		for (var i = 0; i < params.length; i++) 
+		{
+			pair = params[i].split('=');
+			
+			switch (pair[0])
+			{
+				case "auth":
+				
+					Authorization = pair[1];
+				
+				break;
+				
+				case "bankId":
+				
+					bankId = pair[1];
+
+				break;
+				
+				case "companyId":
+				
+					companyId = pair[1];
+
+				break;
+				
+				case "accountId":
+				
+					accountId = pair[1];
+
+				break;	
+			}
+        }
+	
+		var x_api_key = "jmTORtjk1OOQnwloBKu52l2JcQuEixU994xiecn3";
+		var x_partner_id = "5111acc7-c9b3-4d2a-9418-16e97b74b1e6";
+	
+		var route = "/banking/{bankId}/accounts/{accountId}/transactions";
+		
+		route = route.replace("{bankId}", bankId);
+		route = route.replace("{accountId}", accountId);
+		
+		var query ="?companyId=" + companyId;
+
+		xmlhttp.onreadystatechange = function() 
+		{
+			if (this.readyState == 4)
+			{
+				var myArr = JSON.parse(this.responseText);
+				
+				if (this.status == 200) 
+				{
+					processTxns(myArr);
+				}
+				else if (this.status == 400)
+				{
+					processError(myArr);
+				
+				}
+			}
+		};
+		
+		xmlhttp.open("GET", txnurl + route + query, true);
+		
+		// set headers
+		xmlhttp.setRequestHeader("Authorization", "Bearer " + Authorization);
+		xmlhttp.setRequestHeader("x-api-key", x_api_key);
+		xmlhttp.setRequestHeader("x-partner-id", x_partner_id);
+				
+		xmlhttp.send();
+
+		function processTxns(obj) 
+		{
+			var txt;
+			
+			txt = "<h3>Transaction List</h3>"
+
+			txt += "<table border='1'>" 
+			
+			txt += "<tr>";
+			
+			txt += "<th>" + "Txn ID" + "</th>";
+			txt += "<th>" + "Amount" + "</th>";
+			txt += "<th>" + "Description" + "</th>";
+			txt += "<th>" + "Company ID" + "</th>";
+			
+			txt += "</tr>";
+		
+			for (txn in obj.results) 
+			{
+			  txt += "<tr>";
+			  
+			  txt += "<td>" + obj.results[txn].transactionId + "</td>";
+			  txt += "<td>" + obj.results[txn].amount + "</td>";
+			  txt += "<td>" + obj.results[txn].description + "</td>";
+			  txt += "<td>" + obj.results[txn].companyId + "</td>";
+			  
+			  txt += "</tr>";
+			}
+			
+			txt += "</table>" 
+			
+			document.getElementById("txns").innerHTML = txt;
+		}
+		
+		function processError(obj) 
+		{
+			document.getElementById("txns").innerHTML = "<h3>Error listing transactions</h3>" + "<p>" + obj.message + "</p>";
+		}
+	</script>
+  </body>
+</html>

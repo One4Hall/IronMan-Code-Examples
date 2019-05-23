@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<title>Iron Bank - Get Transactions</title>
+		
+		<style type="text/css">
+			label 
+			{
+				clear: left;
+				float: left;
+				width: 200px; /* or whatever length suits */
+
+			}
+			div
+			{
+				margin-left: 100px;
+				margin-bottom: 20px;		
+			}
+			
+			h2
+			{
+				text-align: center;
+			}
+		</style>
+	</head>
+
+<body>
+
+	<h2>Get Transactions</h2>
+
+	<form action="transactions.html" method="get">
+
+		<div> <label>Authorisation Key: </label><input type="text" value="" width="200" style="width:1000px" name="auth"> </div>
+
+		<div><label>Bank Id: </label><input type="text" width="200" style="width:50px" name="bankId" value="6"> </div>
+
+		<div><label>Account Id: </label><input type="text" width="20" style="width:50px" name="accountId" value="fakeacc" > </div>
+
+		<div><label>Company Id: </label><input type="text" width="20" style="width:50px" name="companyId" value="6"> </div>
+
+		<div><input type="submit" value="Submit">
+
+	</form> 
+
+</body>
+</html>

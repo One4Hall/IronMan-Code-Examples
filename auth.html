@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Iron Man - Get Authorisation</title>
+  </head>
+
+  <body>
+  
+	<p id="auth"></p>
+	
+	<script>
+	
+		var xmlhttp = new XMLHttpRequest();
+		
+		var authurl = "https://7gq3bccyoa.execute-api.eu-west-1.amazonaws.com/v1/token";
+		
+		var x_api_key = "jmTORtjk1OOQnwloBKu52l2JcQuEixU994xiecn3";
+		var x_partner_id = "5111acc7-c9b3-4d2a-9418-16e97b74b1e6";
+	
+		xmlhttp.onreadystatechange = function() 
+		{
+			if (this.readyState == 4 && this.status == 201) 
+			{
+				var myArr = JSON.parse(this.responseText);
+				
+				processAuth(myArr);
+			}
+			
+		};
+		
+		xmlhttp.open("POST", authurl, true);
+		
+		// set headers
+		xmlhttp.setRequestHeader("x-api-key", x_api_key);
+		xmlhttp.setRequestHeader("x-partner-id", x_partner_id);
+				
+		xmlhttp.send();
+
+		function processAuth(obj) 
+		{
+	
+			var txt;
+
+			txt = "<table border='1'>" 
+			
+			txt += "<tr>";
+			
+			txt += "<th>" + "Authorisation" + "</th>";
+			
+			txt += "</tr>";
+		
+			txt += "<tr>";
+			
+			if (obj.hasOwnProperty("access_token"))
+			{
+				txt += "<td>" + obj.access_token + "</td>";
+			}
+			else
+			{
+				txt += "<td>" + obj.message + "</td>";
+			}
+			
+			txt += "</table>" 
+			
+			document.getElementById("auth").innerHTML = txt;
+		}
+	</script>
+  </body>
+</html>
